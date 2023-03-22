@@ -8,31 +8,14 @@ class User(AbstractUser):
 
 
 class Book(models.Model):
-    CHOICES = (
-        ('education', 'Education'),
-        ('graphic novel', 'Graphic Novel'),
-        ('horror', 'Horror'),
-        ('romance', 'Romance'),
-        ('fantasy', 'Fantasy'),
-        ('thriller', 'Thriller'),
-        ('mystery', 'Mystery'),
-        ("children's literature", "Children's Literature"),
-        ('biography', 'Biograpy'),
-        ('adventure', 'Adventure'),
-        ('cookbook', 'Cookbook'),
-        ('historical', 'Historical'),
-        ('fiction', 'Fiction'),
-        ('nonfiction', 'Non-fiction'),
-        ('science fiction', 'Science Fiction'),
-    )
-
     title = models.CharField(max_length=100)
     author = models.ForeignKey(
         to='Author',
         on_delete=models.CASCADE,
     )
     year_published = models.IntegerField(blank=True, null=True)
-    genre = models.CharField(choices=CHOICES, max_length=50)
+    # genre = models.CharField(choices=CHOICES, max_length=50)
+    genre = models.ManyToManyField(to='Genre', related_name='genre')
     featured = models.BooleanField(default=False)
 
     class Meta:
@@ -51,6 +34,30 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Genre(models.Model):
+    CHOICES = (
+        ('education', 'Education'),
+        ('graphic novel', 'Graphic Novel'),
+        ('horror', 'Horror'),
+        ('romance', 'Romance'),
+        ('fantasy', 'Fantasy'),
+        ('thriller', 'Thriller'),
+        ('mystery', 'Mystery'),
+        ("children's literature", "Children's Literature"),
+        ('biography', 'Biograpy'),
+        ('adventure', 'Adventure'),
+        ('cookbook', 'Cookbook'),
+        ('historical', 'Historical'),
+        ('fiction', 'Fiction'),
+        ('nonfiction', 'Non-fiction'),
+        ('science fiction', 'Science Fiction'),
+    )
+    genre_name = models.CharField(choices=CHOICES, max_length=50)
+
+    def __str__(self):
+        return self.genre_name
 
 # class Notes(models.Model):
 #     pass
