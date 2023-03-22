@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Book, Author, User
+import django_filters
+from .models import Book, Author, User, Tracking
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -23,4 +24,15 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "username",
+        )
+
+
+class TrackingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tracking
+        fields = (
+            "status",
+            "user",
+            "book",
         )

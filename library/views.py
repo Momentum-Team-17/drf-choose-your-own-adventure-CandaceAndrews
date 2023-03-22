@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters, permissions
+from rest_framework import generics, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import Book, User
-from .serializers import BookSerializer, UserSerializer
+from .models import Book, User, Tracking
+from .serializers import BookSerializer, UserSerializer, TrackingSerializer
 
 
 @api_view(["GET"])
@@ -48,3 +48,14 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserTrackingList(generics.ListAPIView):
+    serializer_class = TrackingSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['status']
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Tracking.objects.filter(user_id=user_id)
+        return queryset
