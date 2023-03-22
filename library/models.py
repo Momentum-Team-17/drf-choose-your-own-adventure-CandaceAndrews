@@ -33,8 +33,11 @@ class Author(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
-        constraints = [models.UniqueConstraint(
-            fields=['name'], name='unique_author_name')]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name'],
+                name='unique_author_name')
+        ]
 
     def __str__(self):
         return self.name
@@ -61,11 +64,44 @@ class Genre(models.Model):
     genre_name = models.CharField(choices=CHOICES, max_length=50)
 
     class Meta:
-        constraints = [models.UniqueConstraint(
-            fields=['genre_name'], name='unique_genre_name')]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['genre_name'],
+                name='unique_genre_name'
+            )
+        ]
 
     def __str__(self):
         return self.genre_name
+
+
+class Tracking(models.Model):
+    CHOICES = (
+        ('want to read', 'Want To Read'),
+        ('reading', 'Reading'),
+        ('read/done', 'Read/Done'),
+    )
+    status = models.CharField(choices=CHOICES, max_length=50)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Tracking"
+        verbose_name_plural = "Tracking"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    'user',
+                    'book'
+                ],
+                name='unique_user_book'
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} - {self.book.title}: {self.status}"
+
 
 # class Notes(models.Model):
 #     pass
