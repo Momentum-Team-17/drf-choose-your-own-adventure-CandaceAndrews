@@ -4,6 +4,8 @@ from .models import Book, Author, User, Tracking
 
 
 class BookSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(many=False)
+    genre = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Book
@@ -17,22 +19,38 @@ class BookSerializer(serializers.ModelSerializer):
         )
 
 
+class TrackingSerializer(serializers.ModelSerializer):
+    book = serializers.StringRelatedField(many=False)
+    user = serializers.StringRelatedField(many=False)
+
+    class Meta:
+
+        model = Tracking
+        fields = (
+            "user",
+            "book",
+            "status",
+        )
+
+
 class UserSerializer(serializers.ModelSerializer):
+    tracking_instances = TrackingSerializer(
+        many=True, read_only=True)
 
     class Meta:
         model = User
         fields = (
             "id",
             "username",
+            "tracking_instances",
         )
 
 
-class TrackingSerializer(serializers.ModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField(many=False)
 
     class Meta:
-        model = Tracking
+        model = Book
         fields = (
-            "status",
-            "user",
-            "book",
+            "name",
         )

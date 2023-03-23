@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models import UniqueConstraint
 
 
 class User(AbstractUser):
@@ -19,7 +18,7 @@ class Book(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=['author', 'title'],
                 name='unique_constraint')
         ]
@@ -82,8 +81,10 @@ class Tracking(models.Model):
         ('read/done', 'Read/Done'),
     )
     status = models.CharField(choices=CHOICES, max_length=50)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    book = models.ForeignKey(to=Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        to=User, on_delete=models.CASCADE, related_name="tracking_instances")
+    book = models.ForeignKey(
+        to=Book, on_delete=models.CASCADE, related_name="tracking_instances")
 
     class Meta:
         verbose_name = "Tracking"

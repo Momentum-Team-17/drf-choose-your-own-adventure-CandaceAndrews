@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import Book, User, Tracking
-from .serializers import BookSerializer, UserSerializer, TrackingSerializer
+from .models import Book, User, Tracking, Author
+from .serializers import BookSerializer, UserSerializer, TrackingSerializer, AuthorSerializer
 
 
 @api_view(["GET"])
@@ -50,7 +50,7 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
-class UserTrackingList(generics.ListAPIView):
+class UserTrackingList(generics.ListCreateAPIView):
     serializer_class = TrackingSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['status']
@@ -59,3 +59,8 @@ class UserTrackingList(generics.ListAPIView):
         user_id = self.request.user.id
         queryset = Tracking.objects.filter(user_id=user_id)
         return queryset
+
+
+class AuthorList(generics.ListAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
