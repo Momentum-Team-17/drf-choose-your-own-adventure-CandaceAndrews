@@ -4,9 +4,10 @@ from rest_framework import generics, filters
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.forms.models import model_to_dict
 
-from .models import Book, User, Tracking, Author
-from .serializers import BookSerializer, UserSerializer, TrackingSerializer, AuthorSerializer
+from .models import Book, User, Tracking, Author, Genre
+from .serializers import BookSerializer, UserSerializer, TrackingSerializer, AuthorSerializer, GenreSerializer
 
 
 @api_view(["GET"])
@@ -14,6 +15,12 @@ def api_root(request, format=None):
     return Response(
         {
             "Books": reverse('book-list', request=request, format=format),
+            "Book Search": reverse('book-search', request=request, format=format),
+            "Featured Books": reverse('book-featured', request=request, format=format),
+            "Users": reverse('users', request=request, format=format),
+            "User Tracking": reverse('user-tracking', request=request, format=format),
+            "Authors": reverse('author-list', request=request, format=format),
+            "Genre": reverse('genre-list', request=request, format=format),
         }
     )
 
@@ -21,6 +28,19 @@ def api_root(request, format=None):
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+    def create(self, request):
+
+        author_id = request.data.get("author").get("id")
+        author = Author.objects.get(id=author_id)
+        title = request.data.get('title')
+        # genres = request.data.get('genre')
+        # writable nested serializer, update queryset, manytomany diff than one to many
+        # pre-fetch related
+        book = Book.objects.create(
+            author=author, title=title)
+        book_serializer = BookSerializer(book)
+        return Response(book_serializer.data)
 
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -64,3 +84,8 @@ class UserTrackingList(generics.ListCreateAPIView):
 class AuthorList(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+
+class GenreList(generics.ListAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer

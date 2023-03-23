@@ -1,11 +1,28 @@
 from rest_framework import serializers
 import django_filters
-from .models import Book, Author, User, Tracking
+from .models import Book, Author, User, Tracking, Genre
+
+
+class GenreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Genre
+        fields = '__all__'
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Author
+        fields = (
+            '__all__'
+        )
 
 
 class BookSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(many=False)
-    genre = serializers.StringRelatedField(many=True)
+    author = AuthorSerializer()
+    genre = GenreSerializer(many=True)
 
     class Meta:
         model = Book
@@ -43,14 +60,4 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "tracking_instances",
-        )
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-    name = serializers.StringRelatedField(many=False)
-
-    class Meta:
-        model = Book
-        fields = (
-            "name",
         )
