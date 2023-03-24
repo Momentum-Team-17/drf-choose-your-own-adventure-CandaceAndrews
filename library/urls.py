@@ -14,6 +14,8 @@ urlpatterns = [
     path('users/tracking/', views.UserTrackingList.as_view(), name="user-tracking"),
     path('authors/', views.AuthorList.as_view(), name="author-list"),
     path('genre/', views.GenreList.as_view(), name='genre-list'),
+    path('notes/', views.NoteList.as_view(), name="notes-list"),
+    # path('notes/', views.book_notes, name="notes"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

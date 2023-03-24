@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 
@@ -104,5 +105,17 @@ class Tracking(models.Model):
         return f"{self.user.username} - {self.book.title}: {self.status}"
 
 
-# class Notes(models.Model):
-#     pass
+class Notes(models.Model):
+    book = models.ForeignKey(to=Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    note_body = models.TextField()
+    is_public = models.BooleanField(default=True)
+    page_number = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Note"
+        verbose_name_plural = "Notes"
+
+    def __str__(self):
+        return f"Notes on - {self.book.title}"

@@ -1,6 +1,5 @@
 from rest_framework import serializers
-import django_filters
-from .models import Book, Author, User, Tracking, Genre
+from .models import Book, Author, User, Tracking, Genre, Notes
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -60,4 +59,15 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "tracking_instances",
+        )
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    book = serializers.StringRelatedField(many=False)
+    user = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Notes
+        fields = (
+            '__all__'
         )
