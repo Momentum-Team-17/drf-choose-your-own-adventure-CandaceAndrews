@@ -4,27 +4,6 @@ Choose one of the following options. In both cases you are building an applicati
 
 **The application you build must be deployed, whichever option you choose. 🚀**
 
-## Option 1: Habit Tracker API
-
-Continue working in your existing Habit Tracker repo -- that is, not this repo! Add a new app to your project and call it `api` (`python manage.py startapp api`). Your app should provide CRUD endpoints that return JSON responses, but provide the _same functionality_ as your original habit tracker.
-
-This API should be _in addition to_, not _in replacement of_, the existing habit tracker application you have already built. You do not need to touch the templates or views you wrote for that app.
-
-Your API should provide endpoints to do all of the following:
-
-- list habits for the logged in user
-- create a new habit associated with the logged in user
-- update a habit if you are the creator of the habit
-- delete a habit if you are the creator of the habit
-- get data about a specific habit that includes its associated daily records, if any, if you are the owner of the habit
-- create a record for a habit for today (stretch: create a record for any date), if you are the owner of the habit
-- update a record for a habit if you are the creator of the habit
-- delete a record from a habit if you are the creator of the habit
-
-Write up a list of endpoints you think you will need before you start doing this. Don't make endpoints you don't need. NOTE: there is not a one-to-one correspondence between the endpoints you make and pages on a front end application that might use your API. 
-
-You should develop and test your endpoints using Insomnia. You can also use the browsable API that DRF gives you in the browser, but you should be comfortable using Insomnia.
-
 ## Option 2: DRF Library API
 
 Create a new API-only application that lets users keep track of books, including important information like title, author, publication date, a genre, and a field that marks it as "featured". Books should be unique by title and author (that is, you can't have two books with the same title _and_ author; two books with the same title is fine as long as the authors are different).
